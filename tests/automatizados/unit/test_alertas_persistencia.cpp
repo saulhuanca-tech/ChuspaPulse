@@ -8,7 +8,7 @@ class AlertasPersistencia : public ::testing::Test {
 protected:
     AlertasPersistencia()
         : db(":memory:", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE), gestor(db) {
-        chuspapulse::storage::inicializarEsquema(db);
+        ChuspaPulse::storage::inicializarEsquema(db);
     }
 
     int contarAlertas() {
@@ -18,13 +18,13 @@ protected:
     }
 
     SQLite::Database db;
-    chuspapulse::alertas::GestorAlertas gestor;
+    ChuspaPulse::alertas::GestorAlertas gestor;
 };
 
 TEST_F(AlertasPersistencia, AlertaDisparadaQuedaEnLaBase) {
-    gestor.addAlerta(chuspapulse::alertas::AlertaUmbral("cpu", 80.0f, '>'));
+    gestor.addAlerta(ChuspaPulse::alertas::AlertaUmbral("cpu", 80.0f, '>'));
 
-    chuspapulse::MetricSnapshot snap;
+    ChuspaPulse::MetricSnapshot snap;
     snap.cpu = 85.0;
     gestor.evaluar(snap);
 
@@ -37,9 +37,9 @@ TEST_F(AlertasPersistencia, AlertaDisparadaQuedaEnLaBase) {
 }
 
 TEST_F(AlertasPersistencia, SinDisparoNoSeGuardaNada) {
-    gestor.addAlerta(chuspapulse::alertas::AlertaUmbral("cpu", 80.0f, '>'));
+    gestor.addAlerta(ChuspaPulse::alertas::AlertaUmbral("cpu", 80.0f, '>'));
 
-    chuspapulse::MetricSnapshot snap;
+    ChuspaPulse::MetricSnapshot snap;
     snap.cpu = 10.0;
     gestor.evaluar(snap);
 
